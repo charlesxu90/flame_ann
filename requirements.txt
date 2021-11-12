@@ -1,0 +1,3 @@
+pandas-bokeh
+#imageio==2.10.1
+multiprocess
