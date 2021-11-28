@@ -3,8 +3,10 @@
 Code for Flame ann experiments.
 ## Startup guide
 ### Preprare & activate environments
-First clone this repository, and open the flame_ann folder.
-Then, run the following codes in command line. Note: If conda is not installed yet, please install [miniconda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html) first.
+1. First clone this repository, and open the flame_ann folder.
+2. Then, run the following codes in command line. 
+
+Note: If conda is not installed yet, please install [miniconda](https://docs.conda.io/projects/conda/en/latest/user-guide/install/linux.html) first.
 ```shell
 # Create flame-ann-env
 conda env create -f environment.yml
@@ -26,7 +28,7 @@ jupyter-lab
 - flame_ann2_W.ipynb        For network 2, i.e. masses
 - flame_ann3_T.ipynb        For network 3, i.e. temperature
 
-The cmp file is for parameter comparison.
+The cmp files are for parameter comparison.
 
 ### Notebooks for data2
 - flame2_preprocess_data.ipynb  For data preprocessing
@@ -34,7 +36,7 @@ The cmp file is for parameter comparison.
 - flame2_ann2_W.ipynb           For network 2, i.e. masses
 - flame2_ann3_T.ipynb           For network 3, i.e. temperature
 
-The cmp file is for parameter comparison.
+The cmp files are for parameter comparison.
 
 ### Fine tune models
 - tune_model  Parallel network architecture fine-tuning
