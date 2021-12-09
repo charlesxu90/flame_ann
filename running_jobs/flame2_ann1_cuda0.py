@@ -1,11 +1,12 @@
 from torch.nn.modules.loss import _Loss
+import torch
 import torch.nn.functional as F
 from torch import Tensor
 import torch.utils.data as Data
 from torch.autograd import Variable
+from torch.utils.tensorboard import SummaryWriter
 import numpy as np
 import pandas as pd
-import torch
 import argparse
 import logging
 
@@ -58,6 +59,7 @@ def train(model, X_train, y_train, X_test, y_test, device='cpu',
 
     optimizer = torch.optim.SGD(model.parameters(), lr=lr, momentum=momentum)
     best_loss = float('inf')
+    writer = SummaryWriter(save_path)
 
     for epoch in range(n_epoch):
         for step, (batch_x, batch_y) in enumerate(loader):
@@ -80,14 +82,19 @@ def train(model, X_train, y_train, X_test, y_test, device='cpu',
 
                 y_err = (y_pred-y_test).cpu().data.numpy()
                 y_abs_err = np.abs(y_err).max(axis=0)   # CO_err, CO2_err
-                logging.info(f"epoch {epoch+1}: Train loss={loss:.4f}, Eval loss={e_loss:.4f}, CO_err={y_abs_err[0]:.4f}, CO2_err={y_abs_err[1]:.4f}")
+                logging.info(f"epoch {epoch+1}: Train loss={loss:.6f}, Eval loss={e_loss:.6f}, "
+                             + f"CO_err={y_abs_err[0]:.6f}, CO2_err={y_abs_err[1]:.6f}")
+                writer.add_scalar('Eval loss', e_loss, epoch + 1)
+                writer.add_scalar('CO err', y_abs_err[0], epoch + 1)
+                writer.add_scalar('CO2 err', y_abs_err[1], epoch + 1)
+
                 if e_loss < best_loss:
                     best_loss = e_loss
-                    save_model(model, save_path + f"model_{epoch+1}_{e_loss:.4f}.pt")
+                    save_model(model, save_path + f"model_{epoch+1}_{e_loss:.6f}.pt")
 
             model.train()
 
-    save_model(model, save_path + f"model_final_{loss:.4f}.pt")
+    save_model(model, save_path + f"model_final_{e_loss:.6f}.pt")
 
 
 def dl_modeling(X_train, y_train, X_test, y_test, nodes, ckpt_path=None, device='cpu', n_epoch=100):
